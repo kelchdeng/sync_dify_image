@@ -31,6 +31,7 @@ jobs:
 
     - name: Pull and push images to Alibaba Cloud ACR
       run: |
+        set +e  # 禁用错误退出行为
         images="${{ steps.parse_docker_compose.outputs.images }}"
         for image in $images; do
           echo "Processing image: $image"

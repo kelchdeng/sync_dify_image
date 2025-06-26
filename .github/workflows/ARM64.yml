@@ -37,10 +37,10 @@ jobs:
           echo "Processing image: $image"
           
           # Pull the image from DockerHub
-          docker pull $image
+          docker pull $image --platform "linux/arm64"
           
           # Extract image tag (last part)
-          image_tag=$(echo $image | awk -F'/' '{print $NF}')
+          image_tag=arm64-$(echo $image | awk -F'/' '{print $NF}')
           
           # Tag the image for ACR
           acr_image="${{ secrets.ACR_REGISTRY }}/kelch/$image_tag"

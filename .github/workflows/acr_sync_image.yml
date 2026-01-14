@@ -1,0 +1,79 @@
+name: Sync GraphDB Image to Alibaba Cloud ACR
+
+on:
+  workflow_dispatch:
+    inputs:
+      image_space:
+        description: ' space'
+        required: true
+        default: 'docker.io/ontotext'
+        type: string
+      image_name:
+        description: ' image name'
+        required: true
+        default: 'graphdb'
+        type: string
+      image_version:
+        description: ' version'
+        required: true
+        default: '10.8.4'
+        type: string
+      
+      
+
+jobs:
+  sync-graphdb-image:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code (optional, only for logging/auditing)
+      uses: actions/checkout@v3
+
+    - name: Log in to Alibaba Cloud ACR
+      run: |
+        echo "${{ secrets.ACR_PASSWORD }}" | docker login \
+          ${{ secrets.ACR_REGISTRY }} \
+          --username ${{ secrets.ACR_USERNAME }} \
+          --password-stdin
+
+    - name: Pull and push GraphDB image to Alibaba Cloud ACR
+      run: |
+        # 设置变量
+        SOURCE_IMAGE="${{ github.event.inputs.image_space }}/${{ github.event.inputs.image_name }}:${{ github.event.inputs.image_version }}"
+        ACR_REGISTRY="${{ secrets.ACR_REGISTRY }}"
+        
+        echo "Source Image: $SOURCE_IMAGE"
+        echo "ACR Registry: $ACR_REGISTRY"
+        
+        # 拉取镜像
+        echo "Pulling image from DockerHub..."
+        docker pull $SOURCE_IMAGE
+        
+        # 定义目标镜像名称
+        # 这里你可以选择保持原名或修改
+        TARGET_IMAGE="$ACR_REGISTRY/kelch/${{ github.event.inputs.image_name }}:${{ github.event.inputs.image_version }}"
+        echo "Target Image: $TARGET_IMAGE"
+        
+        # 标记镜像
+        echo "Tagging image..."
+        docker tag $SOURCE_IMAGE $TARGET_IMAGE
+        
+        # 推送到ACR
+        echo "Pushing image to ACR..."
+        docker push $TARGET_IMAGE
+        
+        # 清理原始镜像（可选）
+        echo "Cleaning up local images..."
+        docker rmi $SOURCE_IMAGE
+        docker rmi $TARGET_IMAGE
+        
+        echo "mage sync completed!"
+        
+    - name: Verify pushed image
+      run: |
+        # 验证镜像已成功推送
+        TARGET_IMAGE="${{ secrets.ACR_REGISTRY }}/kelch/${{ github.event.inputs.image_name }}:${{ github.event.inputs.image_version }}"
+        echo "Verifying image: $TARGET_IMAGE"
+        docker pull $TARGET_IMAGE
+        echo "mage verification successful!"
+        docker rmi $TARGET_IMAGE

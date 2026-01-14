@@ -1,4 +1,4 @@
-name: Sync GraphDB Image to Alibaba Cloud ACR
+name: Sync any Image to Alibaba Cloud ACR
 
 on:
   workflow_dispatch:

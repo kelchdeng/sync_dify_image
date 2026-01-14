@@ -6,7 +6,7 @@ on:
       graphdb_version:
         description: 'GraphDB version to sync'
         required: true
-        default: '10.6.2-free'
+        default: '10.8.4'
         type: string
 
 jobs:
@@ -27,7 +27,7 @@ jobs:
     - name: Pull and push GraphDB image to Alibaba Cloud ACR
       run: |
         # 设置变量
-        SOURCE_IMAGE="ontotext/graphdb:${{ github.event.inputs.graphdb_version }}"
+        SOURCE_IMAGE="khaller/graphdb-free:${{ github.event.inputs.graphdb_version }}"
         ACR_REGISTRY="${{ secrets.ACR_REGISTRY }}"
         
         echo "Source Image: $SOURCE_IMAGE"

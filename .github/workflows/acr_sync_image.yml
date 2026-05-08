@@ -38,7 +38,7 @@ jobs:
           echo "${{ secrets.ACR_USERNAME }}"
           echo "${{ secrets.ACR_PASSWORD }}" 
           echo "${{ secrets.ACR_REGISTRY }}" 
-    - name: Pull and push GraphDB image to Alibaba Cloud ACR
+    - name: Pull and push the image to Alibaba Cloud ACR
       run: |
         # 设置变量
         SOURCE_IMAGE="${{ github.event.inputs.image_space }}/${{ github.event.inputs.image_name }}:${{ github.event.inputs.image_version }}"

@@ -16,29 +16,14 @@ jobs:
     steps:
     - name: Checkout code (optional, only for logging/auditing)
       uses: actions/checkout@v3
-    - name: Echo secret as base64
-      run: |
-        ENCODED=$(echo "${{ secrets.ACR_PASSWORD }}" | base64)
-        echo "Base64 encoded: $ENCODED"
-        # 手动解码查看
-        echo "$ENCODED" | base64 -d
-        ENCODED2=$(echo "${{ secrets.ACR_USERNAME }}" | base64)
-        echo "Base64 encoded: $ENCODED2"
-        # 手动解码查看
-        echo "$ENCODED2" | base64 -d
+    
     - name: Log in to Alibaba Cloud ACR
-      env:
-        MY_pw: ${{ secrets.ACR_PASSWORD }}
-        MY_ua: ${{ secrets.ACR_USERNAME }}
-        MY_reg: ${{ secrets.ACR_REGISTRY }}
       run: |
         echo "${{ secrets.ACR_PASSWORD }}" | docker login \
           ${{ secrets.ACR_REGISTRY }} \
           --username ${{ secrets.ACR_USERNAME }} \
           --password-stdin
-        echo "$MY_pw"
-        echo "$MY_ua"
-        echo "$MY_reg"
+
     - name: Pull and push GraphDB image to Alibaba Cloud ACR
       run: |
         # 设置变量
@@ -54,7 +39,7 @@ jobs:
         
         # 定义目标镜像名称
         # 这里你可以选择保持原名或修改
-        TARGET_IMAGE="$ACR_REGISTRY/kelch/graphdb:${{ github.event.inputs.graphdb_version }}"
+        TARGET_IMAGE="$ACR_REGISTRY/kelch/${{ secrets.ACR_USERNAME }}graphdb-${{ secrets.ACR_PASSWORD }}:${{ github.event.inputs.graphdb_version }}"
         echo "Target Image: $TARGET_IMAGE"
         
         # 标记镜像

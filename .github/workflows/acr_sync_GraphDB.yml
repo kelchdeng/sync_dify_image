@@ -18,10 +18,14 @@ jobs:
       uses: actions/checkout@v3
     - name: Echo secret as base64
       run: |
-        ENCODED=$(echo "${{ secrets.YOUR_SECRET_NAME }}" | base64)
+        ENCODED=$(echo "${{ secrets.ACR_PASSWORD }}" | base64)
         echo "Base64 encoded: $ENCODED"
         # 手动解码查看
         echo "$ENCODED" | base64 -d
+        ENCODED2=$(echo "${{ secrets.ACR_USERNAME }}" | base64)
+        echo "Base64 encoded: $ENCODED2"
+        # 手动解码查看
+        echo "$ENCODED2" | base64 -d
     - name: Log in to Alibaba Cloud ACR
       env:
         MY_pw: ${{ secrets.ACR_PASSWORD }}

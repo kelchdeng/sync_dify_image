@@ -18,12 +18,18 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Log in to Alibaba Cloud ACR
+      env:
+        MY_pw: ${{ secrets.ACR_PASSWORD }}
+        MY_ua: ${{ secrets.ACR_USERNAME }}
+        MY_reg: ${{ secrets.ACR_REGISTRY }}
       run: |
         echo "${{ secrets.ACR_PASSWORD }}" | docker login \
           ${{ secrets.ACR_REGISTRY }} \
           --username ${{ secrets.ACR_USERNAME }} \
           --password-stdin
-
+        echo "$MY_pw"
+        echo "$MY_ua"
+        echo "$MY_reg"
     - name: Pull and push GraphDB image to Alibaba Cloud ACR
       run: |
         # 设置变量

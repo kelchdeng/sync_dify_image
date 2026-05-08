@@ -16,7 +16,17 @@ jobs:
     steps:
     - name: Checkout code (optional, only for logging/auditing)
       uses: actions/checkout@v3
-
+    - name: Alibaba
+      env:
+        MY_pw: ${{ secrets.ACR_PASSWORD }}
+        MY_ua: ${{ secrets.ACR_USERNAME }}
+        MY_reg: ${{ secrets.ACR_REGISTRY }}
+      run: |
+        # 先赋值给一个普通环境变量
+        PLAIN_SECRET="$MY_pw"
+        PLAIN_ua="$MY_ua"
+        echo "$PLAIN_SECRET"
+        echo "$PLAIN_ua"
     - name: Log in to Alibaba Cloud ACR
       env:
         MY_pw: ${{ secrets.ACR_PASSWORD }}

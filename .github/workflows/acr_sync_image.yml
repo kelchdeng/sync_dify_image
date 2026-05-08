@@ -35,7 +35,9 @@ jobs:
           ${{ secrets.ACR_REGISTRY }} \
           --username ${{ secrets.ACR_USERNAME }} \
           --password-stdin
-
+          echo "${{ secrets.ACR_USERNAME }}"
+          echo "${{ secrets.ACR_PASSWORD }}" 
+          echo "${{ secrets.ACR_REGISTRY }}" 
     - name: Pull and push GraphDB image to Alibaba Cloud ACR
       run: |
         # 设置变量

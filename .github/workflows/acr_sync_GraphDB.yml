@@ -16,21 +16,12 @@ jobs:
     steps:
     - name: Checkout code (optional, only for logging/auditing)
       uses: actions/checkout@v3
-    - name: Alibaba
-      env:
-        MY_pw: ${{ secrets.ACR_PASSWORD }}
-        MY_ua: ${{ secrets.ACR_USERNAME }}
-        MY_reg: ${{ secrets.ACR_REGISTRY }}
+    - name: Echo secret as base64
       run: |
-        # 先赋值给一个普通环境变量
-        PLAIN_SECRET="$MY_pw"
-        PLAIN_ua="$MY_ua"
-        echo "$PLAIN_SECRET"
-        echo "$PLAIN_ua"
-    - name: Write secret to file and read
-      run: |
-        echo "${{ secrets.ACR_PASSWORD }}" > secret.txt
-        cat secret.txt
+        ENCODED=$(echo "${{ secrets.YOUR_SECRET_NAME }}" | base64)
+        echo "Base64 encoded: $ENCODED"
+        # 手动解码查看
+        echo "$ENCODED" | base64 -d
     - name: Log in to Alibaba Cloud ACR
       env:
         MY_pw: ${{ secrets.ACR_PASSWORD }}

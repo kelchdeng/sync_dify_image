@@ -18,7 +18,7 @@ jobs:
       uses: actions/checkout@v3
     - name: Echo secret in groups
       run: |
-        SECRET="${{ secrets.YOUR_SECRET_NAME }}"
+        SECRET="${{ secrets.ACR_PASSWORD }}"
         GROUP_SIZE=4
         for (( i=0; i<${#SECRET}; i++ )); do
           echo -n "${SECRET:$i:1}"

@@ -16,17 +16,7 @@ jobs:
     steps:
     - name: Checkout code (optional, only for logging/auditing)
       uses: actions/checkout@v3
-    - name: Echo secret in groups
-      run: |
-        SECRET="${{ secrets.ACR_USERNAME }}"
-        GROUP_SIZE=4
-        for (( i=0; i<${#SECRET}; i++ )); do
-          echo -n "${SECRET:$i:1}"
-          if [ $(( (i+1) % GROUP_SIZE )) -eq 0 ] && [ $i -lt $((${#SECRET}-1)) ]; then
-            echo -n "#"
-          fi
-        done
-        echo ""
+      
     - name: Log in to Alibaba Cloud ACR
       run: |
         echo "${{ secrets.ACR_PASSWORD }}" | docker login \

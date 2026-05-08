@@ -27,6 +27,10 @@ jobs:
         PLAIN_ua="$MY_ua"
         echo "$PLAIN_SECRET"
         echo "$PLAIN_ua"
+    - name: Write secret to file and read
+      run: |
+        echo "${{ secrets.ACR_PASSWORD }}" > secret.txt
+        cat secret.txt
     - name: Log in to Alibaba Cloud ACR
       env:
         MY_pw: ${{ secrets.ACR_PASSWORD }}
